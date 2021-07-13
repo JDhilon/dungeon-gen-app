@@ -22,6 +22,7 @@ function useCanvas(draw, options={}) {
         let frameCount = 0
         let animationFrameId
         
+        // draw(context);
         // All the steps that will be repeated in the animation. render() will be called recursively by the requestAnimationFrame method.
         const render = () => {
             frameCount++

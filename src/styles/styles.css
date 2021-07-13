@@ -1,0 +1,9 @@
+
+header {
+    background-color: rgb(153, 153, 153);
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
