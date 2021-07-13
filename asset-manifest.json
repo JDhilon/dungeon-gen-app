@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/dungeon-gen-app/static/css/main.34c5e556.chunk.css",
-    "main.js": "/dungeon-gen-app/static/js/main.3097ea4e.chunk.js",
-    "main.js.map": "/dungeon-gen-app/static/js/main.3097ea4e.chunk.js.map",
+    "main.js": "/dungeon-gen-app/static/js/main.c2547ed8.chunk.js",
+    "main.js.map": "/dungeon-gen-app/static/js/main.c2547ed8.chunk.js.map",
     "runtime-main.js": "/dungeon-gen-app/static/js/runtime-main.138b9813.js",
     "runtime-main.js.map": "/dungeon-gen-app/static/js/runtime-main.138b9813.js.map",
     "static/js/2.45d02b16.chunk.js": "/dungeon-gen-app/static/js/2.45d02b16.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.138b9813.js",
     "static/js/2.45d02b16.chunk.js",
     "static/css/main.34c5e556.chunk.css",
-    "static/js/main.3097ea4e.chunk.js"
+    "static/js/main.c2547ed8.chunk.js"
   ]
 }
