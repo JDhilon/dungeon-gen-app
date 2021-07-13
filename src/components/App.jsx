@@ -9,7 +9,7 @@ function App() {
     const [gridWidth, setGridWidth] = React.useState(20);
     const [gridHeight, setGridHeight] = React.useState(20);
     const [rooms, setRooms] = React.useState([]);
-
+    const [focusedRoom, setFocusedRoom] = React.useState();
 
     var w = 600;
     var h = 600;
@@ -41,6 +41,7 @@ function App() {
         }
 
         let maxTries = 10;
+        let roomNum = 0;
         roomsToPlace.forEach((r) => {
             let placed = false;
             let tries = 0;
@@ -75,12 +76,15 @@ function App() {
 
                 if(valid){
                     generatedRooms.push({
+                        id: roomNum,
                         x: xPos,
                         y: yPos,
                         width: r.width,
-                        height: r.height
+                        height: r.height,
+                        focused: false
                     });
                     placed = true;
+                    roomNum ++;
                 }
                 else {
                     tries++;
@@ -122,12 +126,55 @@ function App() {
          // Draw all rooms
         rooms.forEach((r) => {
             // Takes center of rect as it's x/y
+            var txt = two.makeText(r.id, r.x + gridSize/2, r.y + gridSize/2);
+            txt.size = gridSize;
+            txt.stroke = 'black';
+            txt.opacity = 0.75;
             var rect = two.makeRectangle(r.x + (r.width / 2), r.y + (r.height/2), r.width, r.height);
-            rect.fill = 'orangered';
+            rect.fill = (r.focused ? 'blue' : 'orangered');
             rect.opacity = 0.5;
         });
 
         two.update();
+    }
+
+    // Checked to see if user clicked on a specific room, and will highlight that room
+    function handleClick(event){
+        let mouseX = event.nativeEvent.layerX;
+        let mouseY = event.nativeEvent.layerY;
+        
+        let roomClicked = rooms.find((r) => {
+            return (mouseX > r.x && mouseX < r.x + r.width && mouseY > r.y && mouseY < r.y + r.height);
+        });
+
+        let idToFind;
+        if(roomClicked === null || roomClicked === undefined) {
+            idToFind = -1;
+            setFocusedRoom();
+        }
+        else {
+            idToFind = roomClicked.id;
+        }
+
+        setRooms(rooms.map( r => {
+            if(idToFind === r.id){
+                r.focused = true;
+                setFocusedRoom(r);
+            } else {
+                r.focused = false;
+            }
+
+            return r;
+        }));
+    }
+
+    // temporary function for printing room parameters
+    function getRoomParams(r) {
+        return 'id: ' + r.id + '\n ' +
+        'x: ' + r.x/gridSize + '\n ' +
+        'y: ' + r.y/gridSize + '\n ' +
+        'height: ' + r.height/gridSize + '\n ' +
+        'width: ' + r.width/gridSize + '\n ';
     }
 
     return <div>
@@ -150,7 +197,9 @@ function App() {
                     }}
                     width={w}
                     height={h}
+                    onClick={handleClick}
                 />
+                <p>{focusedRoom ? getRoomParams(focusedRoom) : null}</p> {/*TODO: Make this an actual component that renders underneath canvas*/}
             </div>
         </div>
   </div>;
