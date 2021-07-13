@@ -19,22 +19,23 @@ function useCanvas(draw, options={}) {
     
         const canvas = canvasRef.current
         const context = canvas.getContext(options.context || '2d')
-        let frameCount = 0
-        let animationFrameId
+        draw(context);
+
+        // Removed animation as it wasn't needed and caused memory issues
+        // let frameCount = 0
+        // let animationFrameId
+        // // All the steps that will be repeated in the animation. render() will be called recursively by the requestAnimationFrame method.
+        // const render = () => {
+        //     frameCount++
+        //     draw(context, frameCount)
+        //     animationFrameId = window.requestAnimationFrame(render)
+        // }
+        // render()
         
-        // draw(context);
-        // All the steps that will be repeated in the animation. render() will be called recursively by the requestAnimationFrame method.
-        const render = () => {
-            frameCount++
-            draw(context, frameCount)
-            animationFrameId = window.requestAnimationFrame(render)
-        }
-        render()
-        
-        // Clean-up. Called right before the component unmount. That way we can ensure that our animation frame is cancelled after our canvas component unmount.
-        return () => {
-        window.cancelAnimationFrame(animationFrameId)
-        }
+        // // Clean-up. Called right before the component unmount. That way we can ensure that our animation frame is cancelled after our canvas component unmount.
+        // return () => {
+        // window.cancelAnimationFrame(animationFrameId)
+        // }
     }, [draw, options])
   
     return canvasRef

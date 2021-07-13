@@ -8,11 +8,11 @@ function App() {
     const [gridSize, setGridSize] = React.useState(25);
     const [gridWidth, setGridWidth] = React.useState(20);
     const [gridHeight, setGridHeight] = React.useState(20);
+    const [rooms, setRooms] = React.useState([]);
 
 
     var w = 600;
     var h = 600;
-    var rooms = [];
 
     // --- Code the created rooms --- // TODO: Move it into external file
     function checkCollision(a, b, padding=0) {
@@ -87,7 +87,9 @@ function App() {
                 }
             }
         });
-        rooms = generatedRooms;
+
+        // Made this with useState for now. Stops memory leak with constantly refreshing canvas
+        setRooms(generatedRooms);
     }
 
     // --- End of creating rooms --- //
@@ -96,7 +98,7 @@ function App() {
     // Define a draw function
     // https://two.js.org/#basic-usage
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    function draw(ctx, frameCount) {
+    function draw(ctx) {
         w = gridSize * gridWidth;
         h = gridSize * gridHeight;
 
