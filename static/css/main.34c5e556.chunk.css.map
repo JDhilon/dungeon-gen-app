@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/styles/styles.css"],"names":[],"mappings":"AACA,OACI,qBACJ,CAEA,WACI,YAAa,CACb,eACF","file":"main.34c5e556.chunk.css","sourcesContent":["\r\nheader {\r\n    background-color: rgb(153, 153, 153);\r\n}\r\n\r\n.btn:focus {\r\n    outline: none;\r\n    box-shadow: none;\r\n  }"]}
