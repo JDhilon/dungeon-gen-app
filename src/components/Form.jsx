@@ -64,8 +64,7 @@ function Form(props){
             console.log('error: ' + roomSize);
         }
 
-        
-        props.onGenerate(targetRoomCount, minSize, maxSize);
+        props.onGenerate(targetRoomCount, minSize, maxSize, gridWidth, gridHeight);
     }
 
     // TODO: Set reasonable max value for the ranges

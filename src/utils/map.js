@@ -1,23 +1,11 @@
 import Graph from "./adj-matrix.graph";
 
-class Generator {
+class Map {
     constructor(size = 0) {
         this.size = size;
         this.rooms = [];
         this.paths = new Graph(size);
         this.focusedRoom = -1;
-    }
-
-    get rooms() {
-        return this.rooms;
-    }
-
-    get paths() {
-        return this.paths;
-    }
-
-    get focusedRoom() {
-        return this.focusedRoom;
     }
 
     // AABB collision detection with optional padding
@@ -33,7 +21,7 @@ class Generator {
         }
     }
 
-    getMidPoint(room) {
+    static getMidPoint(room) {
         return ([room.x+room.width/2, room.y+room.height/2]);
     }
 
@@ -78,7 +66,7 @@ class Generator {
                         height: r.height
                     };
 
-                    let collidedRoom = generatedRooms.find(function(room) {
+                    let collidedRoom = generatedRooms.find((room) => {
                         return this.checkCollision(newRoom, room, 1);
                     });
 
@@ -107,29 +95,32 @@ class Generator {
                 }
             }
         });
+        this.rooms = generatedRooms;
+        this.size = roomNum;
     }
 
-    // TODO: Have this generate all paths and add a method for filtering paths instead
+
     generatePaths() {
+        this.paths = new Graph(this.size);
         this.rooms.forEach((r1, idx1, ar) => {
-            let costs = ar.map((r2, idx2) => {
-                return (idx1 === idx2 ? Number.MAX_VALUE : this.distance(this.getMidPoint(r1), this.getMidPoint(r2)));
-            })
-            
-            let minDist = Math.min(...costs);
-            let minIndex = costs.indexOf(minDist);
-            this.paths.addEdge(idx1, minIndex, Math.floor(minDist));
+            ar.forEach((r2, idx2) => {
+                this.paths.addEdge(idx1, idx2, Math.floor( this.distance(Map.getMidPoint(r1), Map.getMidPoint(r2)) * 100 ) );
+            });
         });
     }
 
     unsetFocusedRoom() {
-        this.focusedRoom = -1;
+        if(this.focusedRoom !== -1) {
+            this.rooms[this.focusedRoom].focused = false;
+            this.focusedRoom = -1;
+        }
     }
 
     setFocusedRoom(id) {
         this.unsetFocusedRoom();
         this.focusedRoom = id;
+        this.rooms[id].focused = true;
     }
 }
 
-export default Generator;
+export default Map;

@@ -17,7 +17,8 @@ class Graph {
         if (vertex1 > this.size - 1 || vertex2 > this.size - 1) {
             console.log('invalid vertex');
         } else if (vertex1 === vertex2) {
-            console.log('same vertex');
+            this.matrix[vertex1][vertex2] = 0;
+            this.matrix[vertex2][vertex1] = 0;
         } else {
             this.matrix[vertex1][vertex2] = weight;
             this.matrix[vertex2][vertex1] = weight;
@@ -28,8 +29,6 @@ class Graph {
     removeEdge(vertex1, vertex2) {
         if (vertex1 > this.size - 1 || vertex2 > this.size - 1) {
             console.log('invalid vertex');
-        } else if (vertex1 === vertex2) {
-            console.log('same vertex');
         } else {
             this.matrix[vertex1][vertex2] = 0;
             this.matrix[vertex2][vertex1] = 0;
@@ -56,6 +55,58 @@ class Graph {
             console.log(row);
         }
     }
+
+    // Utility function to find the vertex with minium cost from vertices not in MST
+    minKey(keys, mstSet) {
+        let min = Number.MAX_VALUE;
+        let minIndex = -1;
+
+        for (let i = 0; i < this.size; i++) {
+            if (mstSet[i] === false && keys[i] < min) {
+                min = keys[i];
+                minIndex = i;
+            }
+        }
+
+        return minIndex;
+    }
+
+    // Function to find MST using Prim's Algorithm
+    primMST() {
+        if(this.size <= 1) {
+            return [];
+        }
+
+        let parents = [];
+        let keys = [];
+        let mstSet = [];
+
+        // Initialize all arrays
+        for(let i = 0; i < this.size; i++){
+            parents.push(0);
+            keys.push(Number.MAX_VALUE);
+            mstSet.push(false);
+        }
+
+        // Set root of MST
+        keys[0] = 0;
+        parents[0] = -1;
+
+        for(let i = 0; i < this.size - 1; i++) {
+            let u = this.minKey(keys, mstSet);
+            mstSet[u] = true;
+
+            for(let v = 0; v < this.size; v++) {
+                if (this.matrix[u][v] !== 0 && mstSet[v] === false && this.matrix[u][v] < keys[v]) {
+                    parents[v] = u;
+                    keys[v] = this.matrix[u][v];
+                }   
+            }
+        }
+
+        return parents;
+    }
+
 }
 
 export default Graph;
