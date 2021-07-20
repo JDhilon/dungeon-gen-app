@@ -1,7 +1,8 @@
 import React from 'react'
+import Two from 'two.js'
+import RoomData from './RoomData'
 import Canvas from './Canvas'
 import Header from './Header'
-import Two from 'two.js'
 import Form from './Form'
 import Graph from '../utils/adj-matrix.graph'
 import Map from '../utils/map'
@@ -16,11 +17,10 @@ function App() {
     var w = 600;
     var h = 600;
 
-    function updateMap(numRooms, minSize, maxSize, mapWidth, mapHeight) {
+    function updateMap(numRooms, minSize, maxSize, mapWidth, mapHeight, connectivity) {
         let m = new Map(numRooms);
         m.generateRooms(minSize, maxSize, mapWidth, mapHeight);
-        m.generatePaths();
-        m.paths.primMST();
+        m.generatePaths(connectivity);
         setMap(m);
         setSelectedRoom(-1);
     }
@@ -61,31 +61,19 @@ function App() {
             rect.opacity = 0.5;
         });
 
-        // Draw paths generated from minimum spanning tree
-        let mst = map.paths.primMST();
-        mst.forEach((dst, src) => {
-            if(dst !== -1){
-                let room1 = Map.getMidPoint(map.rooms[src]);
-                let room2 = Map.getMidPoint(map.rooms[dst]);
-                let line = two.makeLine(room1[0] * gridSize, room1[1] * gridSize, room2[0] * gridSize, room2[1] * gridSize);
-                line.stroke = 'Black';
-                line.lineWidth = 10;  
-            }
+        // Show all generated connections
+        // Blue for any connections not int MST
+        map.paths.matrix.forEach((row, idx1) => {
+            row.forEach((cost, idx2) => {
+                if(cost !== 0){
+                    let room1 = Map.getMidPoint(map.rooms[idx1]);
+                    let room2 = Map.getMidPoint(map.rooms[idx2]);
+                    let line = two.makeLine(room1[0] * gridSize, room1[1] * gridSize, room2[0] * gridSize, room2[1] * gridSize);
+                    line.stroke = (cost === 1 ? 'Black' : 'Blue');
+                    line.lineWidth = 10;
+                }
+            });
         });
-
-        // Show all connections (For debug purposes)
-        // map.paths.matrix.forEach((row, idx1) => {
-        //     row.forEach((cost, idx2) => {
-        //         if(cost !== 0){
-        //             let room1 = Map.getMidPoint(map.rooms[idx1]);
-        //             let room2 = Map.getMidPoint(map.rooms[idx2]);
-        //             let line = two.makeLine(room1[0] * gridSize, room1[1] * gridSize, room2[0] * gridSize, room2[1] * gridSize);
-        //             line.stroke = 'Black';
-        //             line.lineWidth = 1;
-        //             line.opacity = 0.25;
-        //         }
-        //     });
-        // });
 
         two.update();
     }
@@ -141,7 +129,7 @@ function App() {
                     height={h}
                     onClick={handleClick}
                 />
-            <p>{selectedRoom !== -1 ? getRoomParams() : null}</p>{/*TODO: Make this an actual component that renders underneath canvas*/}
+            {selectedRoom !== -1 ? <RoomData data={getRoomParams()} /> : null}
             </div>
         </div>
   </div>;

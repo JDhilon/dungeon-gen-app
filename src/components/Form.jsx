@@ -7,6 +7,7 @@ function Form(props){
     const [gridHeight, setGridHeight] = React.useState(20);
     const [targetRoomCount, setTargetRoomCount] = React.useState(10);
     const [roomSize, setRoomSize] = React.useState('reg');
+    const [connectivity, setConnectivity] = React.useState('sparse');
 
     // -- Setting up the room parameters -- //
     function changeTargetRoomCount(event) {
@@ -17,6 +18,11 @@ function Form(props){
     function changeRoomSize(event) {
         const { name, value } = event.target;
         setRoomSize(value);
+    }
+
+    function changeConnectivity(event) {
+        const { name, value } = event.target;
+        setConnectivity(value);
     }
 
     function changeGridHeight(event) {
@@ -64,7 +70,7 @@ function Form(props){
             console.log('error: ' + roomSize);
         }
 
-        props.onGenerate(targetRoomCount, minSize, maxSize, gridWidth, gridHeight);
+        props.onGenerate(targetRoomCount, minSize, maxSize, gridWidth, gridHeight, connectivity);
     }
 
     // TODO: Set reasonable max value for the ranges
@@ -82,6 +88,15 @@ function Form(props){
             <option value='small'>Small (1x1 - 5x5)</option>
             <option value='reg'>Regular (3x3 - 7x7)</option>
             <option value='large'>Large (5x5 - 10x10)</option>
+        </select>
+        <label>Connectivity: </label>
+        <select className="form-select form-select-sm" value={connectivity} onChange={changeConnectivity}>
+            {/* Linear = 0.00, Sparse = 0.25, normal = 0.50, dense = 0.75, complete = 1.00 */}
+            <option value='linear'>Linear</option>
+            <option value='sparse'>Sparse</option>
+            <option value='normal'>Normal</option>
+            <option value='dense'>Dense</option>
+            <option value='complete'>Complete</option>
         </select>
         <button type='button' className='btn btn-secondary' onClick={resize}>Resize</button>
         <button type='button' className='btn btn-primary' onClick={genDungeon}>Generate</button>

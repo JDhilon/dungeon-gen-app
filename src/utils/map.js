@@ -6,6 +6,20 @@ class Map {
         this.rooms = [];
         this.paths = new Graph(size);
         this.focusedRoom = -1;
+        // Have ways to construct all 5 path types, and return the one we want in a graph representation
+        /* Could do 
+            Make all paths
+            Find longest path
+            Normalize costs based on longest path
+            Find MST
+            Linear = graph of MST
+            For Sparse:
+                For all paths not in MST
+                    If random < 0.25
+                        Add path to graph
+            Similarly for Normal, and Dense
+            Complete will return the original 
+        */
     }
 
     // AABB collision detection with optional padding
@@ -100,13 +114,65 @@ class Map {
     }
 
 
-    generatePaths() {
-        this.paths = new Graph(this.size);
+    generatePaths(connectivity) {
+        let generatedPaths = new Graph(this.size);
+        let maxCost = Number.MIN_VALUE;
         this.rooms.forEach((r1, idx1, ar) => {
             ar.forEach((r2, idx2) => {
-                this.paths.addEdge(idx1, idx2, Math.floor( this.distance(Map.getMidPoint(r1), Map.getMidPoint(r2)) * 100 ) );
+                let cost = Math.floor( this.distance(Map.getMidPoint(r1), Map.getMidPoint(r2)) * 100 );
+                if(cost > maxCost) {
+                    maxCost = cost;
+                }
+                generatedPaths.addEdge(idx1, idx2, cost);
             });
         });
+
+        // Initialize MST
+        generatedPaths.primMST();
+
+        // TODO: Fine tune these values
+        if(connectivity === 'sparse') {
+            generatedPaths.matrix.forEach((row, idx1) => {
+                row.forEach((cost, idx2) => {
+                    if(cost < 0.9) {
+                        generatedPaths.removeEdge(idx1, idx2);
+                    }
+                });
+            });
+        }
+        else if(connectivity === 'normal') {
+            generatedPaths.matrix.forEach((row, idx1) => {
+                row.forEach((cost, idx2) => {
+                    if(cost < 0.8) {
+                        generatedPaths.removeEdge(idx1, idx2);
+                    }
+                });
+            });
+        }
+        else if(connectivity === 'dense') {
+            generatedPaths.matrix.forEach((row, idx1) => {
+                row.forEach((cost, idx2) => {
+                    if(cost < 0.7) {
+                        generatedPaths.removeEdge(idx1, idx2);
+                    }
+                });
+            });
+        }
+        else if(connectivity === 'complete') {
+            // No work to be done
+        }
+        else {
+            // Default to linear
+            generatedPaths.matrix.forEach((row, idx1) => {
+                row.forEach((cost, idx2) => {
+                    if(cost < 1) {
+                        generatedPaths.removeEdge(idx1, idx2);
+                    }
+                });
+            });
+        }
+
+        this.paths = generatedPaths;
     }
 
     unsetFocusedRoom() {

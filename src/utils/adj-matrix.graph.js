@@ -4,12 +4,16 @@ class Graph {
     constructor(size = 1) {
         this.size = size;
         this.matrix = [];
+        this.mst = [];
         for (let i = 0; i < size; i++) {
             this.matrix.push([]);
+            this.mst.push([]);
             for (let j = 0; j < size; j++) {
                 this.matrix[i][j] = 0;
+                this.mst[i][j] = 0;
             }
         }
+        
     }
 
     // Add an edge, checking first to see if vertices are valid
@@ -104,7 +108,27 @@ class Graph {
             }
         }
 
-        return parents;
+        parents.forEach((dst, src) => {
+            if(dst !== -1){
+                this.mst[src][dst] = 1;
+                this.mst[dst][src] = 1;
+            }
+        });
+
+        this.matrix.forEach((row, idx1) => {
+            row.forEach((cost, idx2) => {
+                // If this is not in our MST
+                if(cost !== 0){
+                    // Assign it 1 if it is in MST
+                    if(this.mst[idx1][idx2] === 1) {
+                        this.addEdge(idx1, idx2, 1);
+                    } else {
+                        // Assign it a random cost
+                        this.addEdge(idx1, idx2, Math.random());
+                    }
+                }
+            });
+        });
     }
 
 }
