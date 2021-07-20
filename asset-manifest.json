@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/dungeon-gen-app/static/css/main.34c5e556.chunk.css",
-    "main.js": "/dungeon-gen-app/static/js/main.faee0386.chunk.js",
-    "main.js.map": "/dungeon-gen-app/static/js/main.faee0386.chunk.js.map",
+    "main.js": "/dungeon-gen-app/static/js/main.65597a45.chunk.js",
+    "main.js.map": "/dungeon-gen-app/static/js/main.65597a45.chunk.js.map",
     "runtime-main.js": "/dungeon-gen-app/static/js/runtime-main.138b9813.js",
     "runtime-main.js.map": "/dungeon-gen-app/static/js/runtime-main.138b9813.js.map",
-    "static/js/2.45d02b16.chunk.js": "/dungeon-gen-app/static/js/2.45d02b16.chunk.js",
-    "static/js/2.45d02b16.chunk.js.map": "/dungeon-gen-app/static/js/2.45d02b16.chunk.js.map",
+    "static/js/2.1c4f9e8a.chunk.js": "/dungeon-gen-app/static/js/2.1c4f9e8a.chunk.js",
+    "static/js/2.1c4f9e8a.chunk.js.map": "/dungeon-gen-app/static/js/2.1c4f9e8a.chunk.js.map",
     "index.html": "/dungeon-gen-app/index.html",
     "static/css/main.34c5e556.chunk.css.map": "/dungeon-gen-app/static/css/main.34c5e556.chunk.css.map",
-    "static/js/2.45d02b16.chunk.js.LICENSE.txt": "/dungeon-gen-app/static/js/2.45d02b16.chunk.js.LICENSE.txt"
+    "static/js/2.1c4f9e8a.chunk.js.LICENSE.txt": "/dungeon-gen-app/static/js/2.1c4f9e8a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.138b9813.js",
-    "static/js/2.45d02b16.chunk.js",
+    "static/js/2.1c4f9e8a.chunk.js",
     "static/css/main.34c5e556.chunk.css",
-    "static/js/main.faee0386.chunk.js"
+    "static/js/main.65597a45.chunk.js"
   ]
 }
