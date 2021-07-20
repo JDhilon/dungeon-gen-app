@@ -1,8 +1,10 @@
 import React from 'react'
 import Canvas from './Canvas'
 import Header from './Header'
-import Two from 'two.js';
+import Two from 'two.js'
 import Form from './Form'
+import Graph from '../utils/adj-matrix.graph'
+import Generator from '../utils/generator'
 
 function App() {
     const [gridSize, setGridSize] = React.useState(25);
@@ -23,6 +25,14 @@ function App() {
                 return true;
             } 
         return false;
+    }
+
+    function getMidPoint(room) {
+        return ([room.x+room.width/2, room.y+room.height/2]);
+    }
+
+    function distance(a, b) {
+        return Math.sqrt(((a[0] - b[0]) * (a[0] - b[0])) + ((a[1] - b[1]) * (a[1] - b[1])));
     }
 
     function generateRooms(roomCount, minSize, maxSize) {
@@ -92,8 +102,26 @@ function App() {
             }
         });
 
+        
         // Made this with useState for now. Stops memory leak with constantly refreshing canvas
+        setFocusedRoom();
+        generatePaths(generatedRooms);
         setRooms(generatedRooms);
+    }
+
+    var g;
+    function generatePaths(generatedRooms) {
+        g = new Graph(generatedRooms.length);
+        generatedRooms.forEach((r1, idx1, ar) => {
+            let costs = ar.map((r2, idx2) => {
+                return (idx1 === idx2 ? Number.MAX_VALUE : distance(getMidPoint(r1), getMidPoint(r2)));
+            })
+            
+            let minDist = Math.min(...costs);
+            let minIndex = costs.indexOf(minDist);
+            g.addEdge(idx1, minIndex, Math.floor(minDist));
+        });
+        
     }
 
     // --- End of creating rooms --- //
